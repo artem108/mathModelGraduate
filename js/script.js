@@ -1,13 +1,13 @@
 
 const arrPrevL = [2]
-let count = 0
+let count = 0 //текущий номер обращения к массивам arrF1, arrPrevL
 let arrF1 = [1]
-const Fout = 2
+const Fout = 3
 // обьем смесителя метров
 const S = 2
 // мин и макс уровень в смешивателе литров
-const Lmin = 54
-const Lmax = 112
+const Lmin = 10
+const Lmax = 60
 //оптимальный уровень
 const Lopt = (Lmin + Lmax) / 2
 
@@ -18,42 +18,33 @@ const Lopt = (Lmin + Lmax) / 2
     const f3 = f1 * 4
     let Fall = f1 * 7
 
-
     // предыдущий уровень
     let Lprev = arrPrevL[count]
     // текущий уровень
     let Lcurr = Lprev + (Fall - Fout) * S
 
+    let k = Fall / (Lopt - Lprev)
 
-    let k
-    k = Fall / (Lopt - Lprev)
+      if (roundNum(Lopt) === roundNum(Lcurr)) {
+        setValue(Fall / 7, Lcurr)
+        count = count
+      } else {
+        setValue(Fall / 7, Lcurr)
+        count ++
+      }
 
-    Fall = k * (Lopt - Lprev)
-
-    console.log(Fall == k * (Lopt - Lprev)); //!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    if (Fall == k * (Lopt - Lprev)) setValue(Fall / 7, Lcurr)
-
-
-
-
-    // console.log(k * (Lopt - Lprev));
-    // console.log(Fall);
-
-    console.log('F!', f1);
-    // console.log('Lopt', Lopt);
-    // console.log('Lcurr', Lcurr);
-    // console.log('____________');
-
+    console.log('Lcurr',  roundNum(Lcurr));
+    console.log('Lopt',  roundNum(Lopt));
+    console.log('____________');
   }, 1000)
 
 const setValue = (currF1, L) => {
     arrF1.push(currF1)
     arrPrevL.push(L)
-    count ++
     createChart()
 }
 
+const roundNum = num => Math.round(num / 5) * 5
 
 const createChart = () => {
 let ctx = document.getElementById("myChart");
