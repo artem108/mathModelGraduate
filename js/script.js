@@ -2,12 +2,13 @@
 const arrPrevL = [2]
 let count = 0 //текущий номер обращения к массивам arrF1, arrPrevL
 let arrF1 = [1]
+const Fmax = 10
 const Fout = 3
 // обьем смесителя метров
 const S = 2
 // мин и макс уровень в смешивателе литров
-const Lmin = 10
-const Lmax = 60
+const Lmin = 100
+const Lmax = 200
 //оптимальный уровень
 const Lopt = (Lmin + Lmax) / 2
 
@@ -18,23 +19,33 @@ const Lopt = (Lmin + Lmax) / 2
     const f3 = f1 * 4
     let Fall = f1 * 7
 
-    // предыдущий уровень
+    // пред. уровень
     let Lprev = arrPrevL[count]
     // текущий уровень
+
     let Lcurr = Lprev + (Fall - Fout) * S
 
-    let k = Fall / (Lopt - Lprev)
+    if(Lcurr == Lopt) {
+      Fall =  Fout
+    }
+    else if (Lcurr > Lopt) {
+      Fall = 0
+    }
+    else if((Lopt - Lcurr)  < (Fmax - Fout)){
+      Fall = Lopt - Lcurr
+    }
+    else {
+      Fall = Fmax
+    }
 
-      if (roundNum(Lopt) === roundNum(Lcurr)) {
-        setValue(Fall / 7, Lcurr)
-        count = count
-      } else {
-        setValue(Fall / 7, Lcurr)
-        count ++
-      }
+    if (Fall < 0) Fall = 0
+    else if (Fall > Fmax) Fall = Fmax
 
-    console.log('Lcurr',  roundNum(Lcurr));
-    console.log('Lopt',  roundNum(Lopt));
+    setValue(Fall / 7, Lcurr)
+    count ++
+
+    console.log('Lprev', Lprev)
+    console.log('Lcurr', Lcurr)
     console.log('____________');
   }, 1000)
 
