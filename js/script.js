@@ -1,57 +1,52 @@
 
 const arrPrevL = [2]
-let count = 0 //текущий номер обращения к массивам arrF1, arrPrevL
+let count = 0
 let arrF1 = [1]
 const Fmax = 10
-const Fout = 3
-// обьем смесителя метров
-const S = 2
-// мин и макс уровень в смешивателе литров
-const Lmin = 100
-const Lmax = 200
-//оптимальный уровень
+const Fout = 1
+const countArr = [count]
+
+const S = 10
+
+const Lmin = 2
+const Lmax = 10
 const Lopt = (Lmin + Lmax) / 2
 
   setInterval(() => {
-    //кол-во на вход, наход в соотношении в литрах
-    let f1 = arrF1[count]//будет меняться в зависимости от уровня
+
+    const f1 = arrF1[count]
     const f2 = f1 * 2
     const f3 = f1 * 4
     let Fall = f1 * 7
 
-    // пред. уровень
     let Lprev = arrPrevL[count]
-    // текущий уровень
 
-    let Lcurr = Lprev + (Fall - Fout) * S
+    let Lcurr = Lprev + (Fall - Fout) / S
 
-    if(Lcurr == Lopt) {
-      Fall =  Fout
-    }
-    else if (Lcurr > Lopt) {
-      Fall = 0
-    }
-    else if((Lopt - Lcurr)  < (Fmax - Fout)){
-      Fall = Lopt - Lcurr
-    }
-    else {
-      Fall = Fmax
-    }
+    if (Lcurr == Lopt) Fall =  Fout
+
+    else if (Lcurr > Lopt) Fall = 0
+
+    else if ((Lopt - Lcurr)  < (Fmax - Fout) /S ) Fall = (Lopt - Lcurr) * S
+
+    else Fall = Fmax
 
     if (Fall < 0) Fall = 0
     else if (Fall > Fmax) Fall = Fmax
 
     setValue(Fall / 7, Lcurr)
-    count ++
 
-    console.log('Lprev', Lprev)
+    console.log('Lopt', Lopt)
+    console.log('Fall', Fall)
     console.log('Lcurr', Lcurr)
-    console.log('____________');
+    console.log('____________')
   }, 1000)
 
 const setValue = (currF1, L) => {
     arrF1.push(currF1)
     arrPrevL.push(L)
+    count ++
+    countArr.push(count)
     createChart()
 }
 
@@ -63,7 +58,7 @@ let myChart = new Chart(ctx, {
     type: 'line',
     responsiveAnimationDuration: 0,
     data: {
-        labels: arrF1,
+        labels: countArr,
         datasets: [{
             label: '',
             data: arrPrevL,
